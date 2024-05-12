@@ -131,4 +131,28 @@ public class DatabaseManager
         }
         return task.WorkIntervals;
     }
+    
+    public bool StopInterval(string projectName, string taskName, DateTime endTime)
+    {
+        using var db = new LiteDatabase(_path);
+        var projects = db.GetCollection<Project>("projects");
+        var project = projects.FindOne(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ArgumentException("Project not found.");
+        }
+        var task = project.Tasks.Find(t => t.Name == taskName);
+        if (task == null)
+        {
+            throw new ArgumentException("Task not found.");
+        }
+        var interval = task.WorkIntervals.LastOrDefault(i => i.End == null);
+        if (interval == null)
+        {
+            return false;
+        }
+        interval.End = endTime;
+        projects.Update(project);
+        return true;
+    }
 }

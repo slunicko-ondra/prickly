@@ -9,6 +9,14 @@ public class WorkInterval
     public DateTime? End { get; set; }
     public TimeSpan? Duration { get; set; }
     
+    public WorkInterval()
+    {
+        Id = ObjectId.NewObjectId();
+        Start = null;
+        End = null;
+        Duration = null;
+    }
+    
     public WorkInterval(DateTime start)
     {
         Id = ObjectId.NewObjectId();
