@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using PricklyApp.ViewModels;
+using PricklyApp.Views;
 
 namespace PricklyApp;
 
@@ -7,11 +9,13 @@ namespace PricklyApp;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private MainWindowViewModel _viewModel;
+
     public MainWindow()
     {
         InitializeComponent();
-        string [] projects = new []{"project1", "project2", "project3"};
-        ProjectComboBox.ItemsSource = projects;
+        _viewModel = new MainWindowViewModel();
+        DataContext = _viewModel;
     }
 
 
@@ -23,5 +27,29 @@ public partial class MainWindow : Window
             return;
         }
         StartStopButton.Content = "Stop";
+    }
+
+    private void ProjectComboBox_OnSelected(object sender, RoutedEventArgs e)
+    {
+        var projetcName = ProjectComboBox.SelectedItem.ToString();
+        if (projetcName == null)
+        {
+            return;
+        }
+        _viewModel.UpdateTaskNames(projetcName);
+    }
+
+    private void AddProjectButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var addProjectWindow = new AddProjectWindow(_viewModel.ProjectNames)
+        {
+            Owner = this
+        };
+        addProjectWindow.ShowDialog();
+    }
+
+    private void AddTaskButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 }

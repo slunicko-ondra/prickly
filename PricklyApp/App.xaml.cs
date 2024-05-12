@@ -9,4 +9,5 @@ namespace PricklyApp;
 /// </summary>
 public partial class App : Application
 {
+    public const string DatabaseConnectionString = @".\prickly.db";
 }

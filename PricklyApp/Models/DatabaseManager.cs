@@ -9,18 +9,33 @@ public class DatabaseManager
     public DatabaseManager(string path)
     {
         _path = path;
+        using var db = new LiteDatabase(_path);
+        db.GetCollection<Project>("projects").EnsureIndex(p => p.Name, true);
     }
 
-    public void AddProject(string name)
+    public bool AddProject(string name, List<string>? taskNames = null)
     {
-        var project = new Project(name);
+        Project project;
+        if (taskNames == null)
+        {
+            project = new Project(name);
+        }
+        else
+        {
+            var tasks = taskNames.Select(t => new ProjectTask(t)).ToList();
+            project = new Project(name, tasks);
+        }
         using var db = new LiteDatabase(_path);
         var projects = db.GetCollection<Project>("projects");
+        if (projects.Exists(p => p.Name == name))
+        {
+            return false;
+        }
         projects.Insert(project);
-        projects.EnsureIndex(p => p.Name, true);
+        return true;
     }
     
-    public void AddTask(string projectName, string taskName)
+    public bool AddTask(string projectName, string taskName)
     {
         using var db = new LiteDatabase(_path);
         var projects = db.GetCollection<Project>("projects");
@@ -29,11 +44,37 @@ public class DatabaseManager
         {
             throw new ArgumentException("Project not found.");
         }
+        if (project.Tasks.Any(t => t.Name == taskName))
+        {
+            return false;
+        }
         project.Tasks.Add(new ProjectTask(taskName));
         projects.Update(project);
+        return true;
     }
     
-    public void AddInterval(string projectName, string taskName, WorkInterval interval)
+    public bool AddTasks(string projectName, List<string> taskNames)
+    {
+        using var db = new LiteDatabase(_path);
+        var projects = db.GetCollection<Project>("projects");
+        var project = projects.FindOne(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ArgumentException("Project not found.");
+        }
+        if (project.Tasks.Select(t => t.Name).Concat(taskNames).GroupBy(name => name).Any(g => g.Count() > 1))
+        {
+            return false;
+        }
+        foreach (var taskName in taskNames)
+        {
+            project.Tasks.Add(new ProjectTask(taskName));
+        }
+        projects.Update(project);
+        return true;
+    }
+    
+    public bool AddInterval(string projectName, string taskName, WorkInterval interval)
     {
         using var db = new LiteDatabase(_path);
         var projects = db.GetCollection<Project>("projects");
@@ -49,6 +90,7 @@ public class DatabaseManager
         }
         task.WorkIntervals.Add(interval);
         projects.Update(project);
+        return true;
     }
     
     public List<Project> GetProjects()

@@ -4,7 +4,7 @@ namespace PricklyApp.Models;
 
 public class WorkInterval
 {
-    public ObjectId Id { get; }
+    public ObjectId Id { get; set; }
     public DateTime? Start { get; set; }
     public DateTime? End { get; set; }
     public TimeSpan? Duration { get; set; }

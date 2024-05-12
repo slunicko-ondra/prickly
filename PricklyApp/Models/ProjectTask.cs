@@ -4,9 +4,9 @@ namespace PricklyApp.Models;
 
 public class ProjectTask
 {
-    public ObjectId Id { get; }
+    public ObjectId Id { get; set; }
     public string Name { get; set; }
-    public List<WorkInterval> WorkIntervals { get; }
+    public List<WorkInterval> WorkIntervals { get; set; }
     
     public ProjectTask(string name)
     {
