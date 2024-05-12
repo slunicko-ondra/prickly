@@ -50,6 +50,18 @@ public partial class MainWindow : Window
 
     private void AddTaskButton_OnClick(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        var project = ProjectComboBox.SelectedItem.ToString();
+        if (project == null)
+        {
+            MessageBox.Show(this, "Project must be selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        else
+        {
+            var addTaskWindow = new AddTaskWindow(project, _viewModel.TaskNames)
+            {
+                Owner = this
+            };
+            addTaskWindow.ShowDialog();
+        }
     }
 }

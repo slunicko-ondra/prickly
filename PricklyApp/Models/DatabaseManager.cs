@@ -44,11 +44,14 @@ public class DatabaseManager
         {
             throw new ArgumentException("Project not found.");
         }
-        if (project.Tasks.Any(t => t.Name == taskName))
+        try
+        {
+            project.AddTask(taskName);
+        }
+        catch (ArgumentException)
         {
             return false;
         }
-        project.Tasks.Add(new ProjectTask(taskName));
         projects.Update(project);
         return true;
     }

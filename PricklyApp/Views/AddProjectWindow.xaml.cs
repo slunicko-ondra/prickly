@@ -8,6 +8,7 @@ public partial class AddProjectWindow : Window
 {
     private AddProjectViewModel _viewModel;
     private ObservableCollection<string> _projectNames;
+    
     public AddProjectWindow(ObservableCollection<string> projectNames)
     {
         InitializeComponent();
