@@ -1,0 +1,80 @@
+﻿<Window x:Class="PricklyApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PricklyApp"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="Prickly" Height="225" Width="450">
+    <Grid Margin="25, 0, 25, 25">
+        <!-- Project and Task selection -->
+        <Grid Height="120" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="26"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Label Grid.Row="0" Content="Project" />
+            <ComboBox
+                x:Name="ProjectComboBox"
+                Grid.Row="1"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Height="25"
+                Width="120" />
+            <Button
+                Grid.Row="1"
+                Height="25"
+                Width="25"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="+" />
+            
+            <Label Grid.Row="2" Content="Task" />
+            <ComboBox
+                Grid.Row="3"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Height="25"
+                Width="120"/>
+            <Button
+                Grid.Row="3"
+                Height="25"
+                Width="25"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Content="+"/>
+        </Grid>
+        
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Margin="0, 10, 0, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="25"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Foreground="LimeGreen"
+                       FontSize="14">⚫</TextBlock>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="36">01:27:42</TextBlock>
+            <Button Grid.Column="2" Height="25" Width="25" VerticalAlignment="Center">✎</Button>
+        </Grid>
+        
+        <Grid VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="40"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0" Name="SettingsButton" Height="25" Width="25" HorizontalAlignment="Left" FontSize="16"
+                    Padding="0,-3,-1,0" Content="⚙️"/>
+            <Button Grid.Column="1" Name="AboutButton" Height="25" Width="25" HorizontalAlignment="Left" FontSize="22"
+                    Padding="0,-5,0,0" Content="ⓘ"/>
+            <Button Grid.Column="2" Name="StartStopButton" Height="25" Width="100" HorizontalAlignment="Right"
+                    Content="Start" Click="StartStopButton_OnClick"/>
+        </Grid>
+    </Grid>
+</Window>
