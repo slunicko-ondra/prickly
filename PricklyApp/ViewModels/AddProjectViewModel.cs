@@ -9,12 +9,15 @@ public class AddProjectViewModel
     
     public AddProjectViewModel()
     {
-        _databaseManager = new DatabaseManager(App.DatabaseConnectionString);
+        _databaseManager = new DatabaseManager(App.Config.ConnectionStrings.ConnectionStrings["litedb"].ConnectionString);
     }
     
     public bool AddProject(string projectName, string taskNames)
     {
-        var taskNamesList = taskNames.Split().ToList();
+        var taskNamesList = taskNames
+            .Split(',')
+            .Select(t => t.Trim())
+            .ToList();
         return _databaseManager.AddProject(projectName, taskNamesList);
     }
 }

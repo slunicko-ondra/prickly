@@ -15,7 +15,7 @@ public class MainWindowViewModel
     
     public MainWindowViewModel()
     {
-        _databaseManager = new DatabaseManager(App.DatabaseConnectionString);
+        _databaseManager = new DatabaseManager(App.Config.ConnectionStrings.ConnectionStrings["litedb"].ConnectionString);
         ProjectNames = new ObservableCollection<string>(GetProjectNames());
         TaskNames = new ObservableCollection<string>();
         DisplayTime = new DisplayTime();

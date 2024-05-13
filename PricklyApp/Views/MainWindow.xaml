@@ -95,8 +95,15 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <Button Grid.Column="0" Name="SettingsButton" Height="25" Width="25" HorizontalAlignment="Left" FontSize="16"
-                    Padding="0,-3,-1,0" Content="⚙️"/>
+            <Button
+                x:Name="SettingsButton"
+                Grid.Column="0"
+                Height="25"
+                Width="25"
+                HorizontalAlignment="Left"
+                FontSize="16"
+                Padding="0,-3,-1,0"
+                Content="⚙️"/>
             <Button Grid.Column="1" Name="AboutButton" Height="25" Width="25" HorizontalAlignment="Left" FontSize="22"
                     Padding="0,-5,0,0" Content="ⓘ"/>
             <Button Grid.Column="2" Name="StartStopButton" Height="25" Width="100" HorizontalAlignment="Right"

@@ -8,7 +8,7 @@ public class AddTaskViewModel
     
     public AddTaskViewModel()
     {
-        _databaseManager = new DatabaseManager(App.DatabaseConnectionString);
+        _databaseManager = new DatabaseManager(App.Config.ConnectionStrings.ConnectionStrings["litedb"].ConnectionString);
     }
     
     public bool AddTask(string projectName, string taskName)

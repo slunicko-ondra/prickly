@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Data;
 using System.Windows;
 
 namespace PricklyApp;
@@ -9,5 +8,17 @@ namespace PricklyApp;
 /// </summary>
 public partial class App : Application
 {
-    public const string DatabaseConnectionString = @".\prickly.db";
+    private const string DatabaseConnectionString = @".\prickly.db";
+    public static readonly Configuration Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+    
+    public App()
+    {
+        Config.ConnectionStrings.ConnectionStrings.Add(new ConnectionStringSettings("litedb", DatabaseConnectionString));
+        Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("defaultAfkSeconds", "300"));
+        if (Config.AppSettings.Settings["afkSeconds"] == null)
+        {
+            Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("afkSeconds", "300"));
+        }
+        Config.Save();
+    }
 }
