@@ -199,4 +199,20 @@ public partial class MainWindow : Window
         settingsWindow.ShowDialog();
         _maxAfkSeconds = int.Parse(App.Config.AppSettings.Settings["afkSeconds"].Value);
     }
+
+    private void DetailButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var projectName = ProjectComboBox.SelectedItem?.ToString();
+        var taskName = TaskComboBox.SelectedItem?.ToString();
+        if (projectName == null || taskName == null)
+        {
+            return;
+        }
+
+        var detailWindow = new DetailWindow(projectName, taskName)
+        {
+            Owner = this
+        };
+        detailWindow.ShowDialog();
+    }
 }

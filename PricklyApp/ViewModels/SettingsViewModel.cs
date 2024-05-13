@@ -80,6 +80,10 @@ public class SettingsViewModel
             MessageBox.Show("Select a file to import.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
+        // TODO: Implement CsvManager.Import
+        MessageBox.Show("Import not implemented.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        return;
+        
         try
         {
             CsvManager.Import(fileName, _databaseManager);
