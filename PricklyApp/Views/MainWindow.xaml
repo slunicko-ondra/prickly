@@ -72,8 +72,13 @@
                 <ColumnDefinition Width="25"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <TextBlock Grid.Column="0" VerticalAlignment="Center" Foreground="LimeGreen"
-                       FontSize="14">⚫</TextBlock>
+            <TextBlock
+                x:Name="DotIndicatorTextBlock"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Foreground="Red"
+                FontSize="14"
+                Text="⚫"/>
             <TextBlock
                 x:Name="DisplayTimeTextBlock"
                 Grid.Column="1"

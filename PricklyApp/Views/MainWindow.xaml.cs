@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Gma.System.MouseKeyHook;
 using PricklyApp.ViewModels;
@@ -73,11 +74,12 @@ public partial class MainWindow : Window
         else
         {
             StartStopButton.Content = "Stop";
+            DotIndicatorTextBlock.Foreground = Brushes.LimeGreen;
             _timer.Start();
         }
     }
 
-    private void StopButtonClicked(string project, string task, DateTime? end=null)
+    private void StopButtonClicked(string project, string task, DateTime? end=null, bool? isPause=null)
     {
         var result = _viewModel.StopWork(project, task, end);
         if (!result)
@@ -87,6 +89,7 @@ public partial class MainWindow : Window
         else
         {
             StartStopButton.Content = "Start";
+            DotIndicatorTextBlock.Foreground = isPause == true ? Brushes.Orange : Brushes.Red;
             _timer.Stop();
         }
     }
@@ -161,7 +164,7 @@ public partial class MainWindow : Window
         {
             return;
         }
-        StopButtonClicked(projectName, taskName, DateTime.Now.AddSeconds(-_afkSeconds));
+        StopButtonClicked(projectName, taskName, DateTime.Now.AddSeconds(-_afkSeconds), true);
         _userIsAfk = true;
     }
     
