@@ -8,6 +8,7 @@
         xmlns:models="clr-namespace:PricklyApp.Models"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
+        Closing="MainWindow_OnClosing"
         Title="Prickly" Height="225" Width="450">
     <Window.DataContext>
         <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>

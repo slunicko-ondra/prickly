@@ -55,9 +55,10 @@ public class MainWindowViewModel
         return _databaseManager.AddInterval(projectName, taskName, new WorkInterval(DateTime.Now));
     }
     
-    public bool StopWork(string projectName, string taskName)
+    public bool StopWork(string projectName, string taskName, DateTime? end=null)
     {
-        return _databaseManager.StopInterval(projectName, taskName, DateTime.Now);
+        var endTime = end ?? DateTime.Now;
+        return _databaseManager.StopInterval(projectName, taskName, endTime);
     }
     
     public void UpdateDisplayTime(string projectName, string taskName)
@@ -84,6 +85,21 @@ public class MainWindowViewModel
     private void ResetDisplayTime()
     {
         DisplayTime.Time = TimeSpan.Zero;
+    }
+    
+    public void StopAllWork()
+    {
+        var projects = _databaseManager.GetProjects();
+        foreach (var project in projects)
+        {
+            foreach (var task in project.Tasks)
+            {
+                if (task.WorkIntervals.LastOrDefault(i => i.End == null) != null)
+                {
+                    StopWork(project.Name, task.Name);
+                }
+            }
+        }
     }
     
     private void GetTodayIntervals(string projectName, string taskName)

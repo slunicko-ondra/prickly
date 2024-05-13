@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Gma.System.MouseKeyHook;
 using PricklyApp.ViewModels;
 using PricklyApp.Views;
 
@@ -13,6 +15,10 @@ public partial class MainWindow : Window
 {
     private MainWindowViewModel _viewModel;
     private DispatcherTimer _timer;
+    private int _afkSeconds;
+    private const int MaxAfkSeconds = 10;
+    private IKeyboardMouseEvents _globalHook;
+    private bool _userIsAfk;
 
     public MainWindow()
     {
@@ -20,9 +26,16 @@ public partial class MainWindow : Window
         _viewModel = new MainWindowViewModel();
         DataContext = _viewModel;
         
+        _afkSeconds = 0;
+        _userIsAfk = false;
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromSeconds(1);
         _timer.Tick += TimerOnTick;
+        
+        _globalHook = Hook.GlobalEvents();
+        _globalHook.MouseDownExt += GlobalHook_OnUserActivity;
+        _globalHook.KeyPress += GlobalHook_OnUserActivity;
+        _globalHook.MouseMove += GlobalHook_OnUserActivity;
     }
 
     private void StartStopButton_OnClick(object sender, RoutedEventArgs e)
@@ -43,14 +56,10 @@ public partial class MainWindow : Window
         if (StartStopButton.Content.ToString() == "Start")
         {
             StartButtonClicked(projectString, taskString);
-            _timer.Start();
-            StartStopButton.Content = "Stop";
         }
         else
         {
             StopButtonClicked(projectString, taskString);
-            _timer.Stop();
-            StartStopButton.Content = "Start";
         }
     }
 
@@ -61,14 +70,24 @@ public partial class MainWindow : Window
         {
             MessageBox.Show(this, "Failed to start work.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+        else
+        {
+            StartStopButton.Content = "Stop";
+            _timer.Start();
+        }
     }
 
-    private void StopButtonClicked(string project, string task)
+    private void StopButtonClicked(string project, string task, DateTime? end=null)
     {
-        var result = _viewModel.StopWork(project, task);
+        var result = _viewModel.StopWork(project, task, end);
         if (!result)
         {
             MessageBox.Show(this, "Failed to stop work.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        else
+        {
+            StartStopButton.Content = "Start";
+            _timer.Stop();
         }
     }
 
@@ -110,6 +129,11 @@ public partial class MainWindow : Window
 
     private void TimerOnTick(object? sender, EventArgs e)
     {
+        _afkSeconds++;
+        if (_afkSeconds >= MaxAfkSeconds)
+        {
+            UserIsAfk();
+        }
         UpdateDisplayTime();
     }
 
@@ -127,5 +151,38 @@ public partial class MainWindow : Window
             return;
         }
         _viewModel.UpdateDisplayTime(projectName, taskName);
+    }
+
+    private void UserIsAfk()
+    {
+        var projectName = ProjectComboBox.SelectedItem?.ToString();
+        var taskName = TaskComboBox.SelectedItem?.ToString();
+        if (projectName == null || taskName == null)
+        {
+            return;
+        }
+        StopButtonClicked(projectName, taskName, DateTime.Now.AddSeconds(-_afkSeconds));
+        _userIsAfk = true;
+    }
+    
+    private void GlobalHook_OnUserActivity(object? sender, EventArgs e)
+    {
+        _afkSeconds = 0;
+        if (_userIsAfk)
+        {
+            _userIsAfk = false;
+            var projectName = ProjectComboBox.SelectedItem?.ToString();
+            var taskName = TaskComboBox.SelectedItem?.ToString();
+            if (projectName == null || taskName == null)
+            {
+                return;
+            }
+            StartButtonClicked(projectName, taskName);
+        }
+    }
+
+    private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
+    {
+        _viewModel.StopAllWork();
     }
 }
