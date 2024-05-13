@@ -10,6 +10,8 @@ public class MainWindowViewModel
     public ObservableCollection<string> ProjectNames { get; }
     public ObservableCollection<string> TaskNames { get; }
     public DisplayTime DisplayTime { get; set; }
+    private List<TodayInterval> _todayIntervals;
+    private DateTime _today;
     
     public MainWindowViewModel()
     {
@@ -17,7 +19,9 @@ public class MainWindowViewModel
         ProjectNames = new ObservableCollection<string>(GetProjectNames());
         TaskNames = new ObservableCollection<string>();
         DisplayTime = new DisplayTime();
-        UpdateDisplayTime();
+        ResetDisplayTime();
+        _todayIntervals = new List<TodayInterval>();
+        _today = DateTime.Today;
     }
     
     private List<string> GetProjectNames()
@@ -56,8 +60,44 @@ public class MainWindowViewModel
         return _databaseManager.StopInterval(projectName, taskName, DateTime.Now);
     }
     
-    public void UpdateDisplayTime()
+    public void UpdateDisplayTime(string projectName, string taskName)
     {
-        DisplayTime.Time = DateTime.Now.TimeOfDay;
+        var intervals = _databaseManager.GetIntervals(projectName, taskName);
+        var todayCreatedAndEnded = intervals
+            .Where(i => i.CreatedAt.Date == DateTime.Today && i.End?.Date == DateTime.Today)
+            .Select(i => new TodayInterval(i.CreatedAt, i.Duration ?? TimeSpan.Zero))
+            .ToList();
+        var todayEnded = intervals
+            .Where(i => i.CreatedAt.Date != DateTime.Today && i.End?.Date == DateTime.Today)
+            .Select(i => new TodayInterval(i.End ?? DateTime.Today, DateTime.Today - i.End ?? TimeSpan.Zero))
+            .ToList();
+        var total = todayCreatedAndEnded.Concat(todayEnded)
+            .Select(i => i.Duration)
+            .Aggregate(TimeSpan.Zero, (acc, duration) => acc + duration);
+        total += _databaseManager.GetIntervals(projectName, taskName)
+            .Where(i => i.CreatedAt.Date == DateTime.Today && i.End == null && i.Duration == null)
+            .Select(i => DateTime.Now - i.CreatedAt)
+            .Aggregate(TimeSpan.Zero, (acc, duration) => acc + duration);
+        DisplayTime.Time = total;
+    }
+    
+    private void ResetDisplayTime()
+    {
+        DisplayTime.Time = TimeSpan.Zero;
+    }
+    
+    private void GetTodayIntervals(string projectName, string taskName)
+    {
+        var intervals = _databaseManager.GetIntervals(projectName, taskName);
+        var todayCreatedAndEnded = intervals
+            .Where(i => i.CreatedAt.Date == DateTime.Today && i.End?.Date == DateTime.Today)
+            .Select(i => new TodayInterval(i.CreatedAt, i.Duration ?? TimeSpan.Zero))
+            .ToList();
+        var todayEnded = intervals
+            .Where(i => i.CreatedAt.Date != DateTime.Today && i.End?.Date == DateTime.Today)
+            .Select(i => new TodayInterval(i.End ?? DateTime.Today, DateTime.Today - i.End ?? TimeSpan.Zero))
+            .ToList();
+        _todayIntervals = todayCreatedAndEnded.Concat(todayEnded).ToList();
+        _today = DateTime.Today;
     }
 }

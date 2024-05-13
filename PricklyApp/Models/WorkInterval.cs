@@ -5,6 +5,7 @@ namespace PricklyApp.Models;
 public class WorkInterval
 {
     public ObjectId Id { get; set; }
+    public DateTime CreatedAt { get; set; }
     public DateTime? Start { get; set; }
     public DateTime? End { get; set; }
     public TimeSpan? Duration { get; set; }
@@ -12,6 +13,7 @@ public class WorkInterval
     public WorkInterval()
     {
         Id = ObjectId.NewObjectId();
+        CreatedAt = DateTime.Now;
         Start = null;
         End = null;
         Duration = null;
@@ -20,6 +22,7 @@ public class WorkInterval
     public WorkInterval(DateTime start)
     {
         Id = ObjectId.NewObjectId();
+        CreatedAt = start;
         Start = start;
         End = null;
         Duration = null;
@@ -28,6 +31,7 @@ public class WorkInterval
     public WorkInterval(DateTime start, DateTime end)
     {
         Id = ObjectId.NewObjectId();
+        CreatedAt = start;
         Start = start;
         End = end;
         Duration = end - start;
@@ -36,6 +40,7 @@ public class WorkInterval
     public WorkInterval(TimeSpan duration)
     {
         Id = ObjectId.NewObjectId();
+        CreatedAt = DateTime.Now;
         Start = null;
         End = null;
         Duration = duration;

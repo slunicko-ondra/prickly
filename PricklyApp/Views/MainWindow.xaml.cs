@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using PricklyApp.ViewModels;
 using PricklyApp.Views;
@@ -73,12 +74,12 @@ public partial class MainWindow : Window
 
     private void ProjectComboBox_OnSelected(object sender, RoutedEventArgs e)
     {
-        var projetcName = ProjectComboBox.SelectedItem.ToString();
-        if (projetcName == null)
+        var projectName = ProjectComboBox.SelectedItem?.ToString();
+        if (projectName == null)
         {
             return;
         }
-        _viewModel.UpdateTaskNames(projetcName);
+        _viewModel.UpdateTaskNames(projectName);
     }
 
     private void AddProjectButton_OnClick(object sender, RoutedEventArgs e)
@@ -92,14 +93,14 @@ public partial class MainWindow : Window
 
     private void AddTaskButton_OnClick(object sender, RoutedEventArgs e)
     {
-        var project = ProjectComboBox.SelectedItem.ToString();
-        if (project == null)
+        var projectName = ProjectComboBox.SelectedItem?.ToString();
+        if (projectName == null)
         {
             MessageBox.Show(this, "Project must be selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         else
         {
-            var addTaskWindow = new AddTaskWindow(project, _viewModel.TaskNames)
+            var addTaskWindow = new AddTaskWindow(projectName, _viewModel.TaskNames)
             {
                 Owner = this
             };
@@ -109,6 +110,22 @@ public partial class MainWindow : Window
 
     private void TimerOnTick(object? sender, EventArgs e)
     {
-        _viewModel.UpdateDisplayTime();
+        UpdateDisplayTime();
+    }
+
+    private void TaskComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        UpdateDisplayTime();
+    }
+    
+    private void UpdateDisplayTime()
+    {
+        var projectName = ProjectComboBox.SelectedItem?.ToString();
+        var taskName = TaskComboBox.SelectedItem?.ToString();
+        if (projectName == null || taskName == null)
+        {
+            return;
+        }
+        _viewModel.UpdateDisplayTime(projectName, taskName);
     }
 }

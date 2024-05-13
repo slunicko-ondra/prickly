@@ -14,9 +14,9 @@ public class DisplayTime : INotifyPropertyChanged
             if (_time != value)
             {
                 _time = value;
-                TimeString = _time.ToString(@"hh\:mm\:ss");
                 OnPropertyChanged(nameof(Time));
             }
+            TimeString = _time.ToString(@"hh\:mm\:ss");
         }
     }
     private string _timeString;

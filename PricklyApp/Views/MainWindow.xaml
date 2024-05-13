@@ -51,7 +51,8 @@
                 HorizontalAlignment="Left"
                 Height="25"
                 Width="120"
-                ItemsSource="{Binding TaskNames}"/>
+                ItemsSource="{Binding TaskNames}"
+                SelectionChanged="TaskComboBox_OnSelectionChanged"/>
             <Button
                 x:Name="AddTaskButton"
                 Grid.Row="3"

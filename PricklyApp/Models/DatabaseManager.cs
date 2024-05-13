@@ -151,7 +151,7 @@ public class DatabaseManager
         {
             return false;
         }
-        interval.End = endTime;
+        interval.Stop(endTime);
         projects.Update(project);
         return true;
     }
