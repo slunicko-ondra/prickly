@@ -15,7 +15,7 @@ public class AddProjectViewModel
     public bool AddProject(string projectName, string taskNames)
     {
         var taskNamesList = taskNames
-            .Split(',')
+            .Split(App.Config.AppSettings.Settings["addProjectWindowTaskDelimiter"].Value)
             .Select(t => t.Trim())
             .ToList();
         return _databaseManager.AddProject(projectName, taskNamesList);
