@@ -26,7 +26,8 @@
             Height="26"
             Width="125"
             VerticalAlignment="Top"
-            HorizontalAlignment="Left"/>
+            HorizontalAlignment="Left"
+            VerticalContentAlignment="Center"/>
         
         <Label
             Grid.Row="2"

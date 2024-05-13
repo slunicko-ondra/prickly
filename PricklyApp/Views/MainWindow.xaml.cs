@@ -17,7 +17,7 @@ public partial class MainWindow : Window
     private MainWindowViewModel _viewModel;
     private DispatcherTimer _timer;
     private int _afkSeconds;
-    private const int MaxAfkSeconds = 10;
+    private int _maxAfkSeconds;
     private IKeyboardMouseEvents _globalHook;
     private bool _userIsAfk;
 
@@ -26,8 +26,9 @@ public partial class MainWindow : Window
         InitializeComponent();
         _viewModel = new MainWindowViewModel();
         DataContext = _viewModel;
-        
+
         _afkSeconds = 0;
+        _maxAfkSeconds = int.Parse(App.Config.AppSettings.Settings["afkSeconds"].Value);
         _userIsAfk = false;
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromSeconds(1);
@@ -133,7 +134,7 @@ public partial class MainWindow : Window
     private void TimerOnTick(object? sender, EventArgs e)
     {
         _afkSeconds++;
-        if (_afkSeconds >= MaxAfkSeconds)
+        if (_afkSeconds >= _maxAfkSeconds)
         {
             UserIsAfk();
         }
@@ -187,5 +188,15 @@ public partial class MainWindow : Window
     private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
     {
         _viewModel.StopAllWork();
+    }
+
+    private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var settingsWindow = new SettingsWindow
+        {
+            Owner = this
+        };
+        settingsWindow.ShowDialog();
+        _maxAfkSeconds = int.Parse(App.Config.AppSettings.Settings["afkSeconds"].Value);
     }
 }

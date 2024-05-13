@@ -1,11 +1,43 @@
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using PricklyApp.ViewModels;
 
 namespace PricklyApp.Views;
 
 public partial class SettingsWindow : Window
 {
+    private SettingsViewModel _viewModel;
+    private string _previousTimeUnit;
+    
     public SettingsWindow()
     {
         InitializeComponent();
+        _viewModel = new SettingsViewModel();
+        _previousTimeUnit = "seconds";
+        TimeUnitComboBox.SelectedIndex = 0;
+        DataContext = _viewModel;
+    }
+
+    private void AfkTimeTextBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        var regex = new Regex("[^0-9]+");
+        e.Handled = regex.IsMatch(e.Text);
+    }
+
+    private void SaveButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var timeUnit = TimeUnitComboBox.SelectedItem.ToString() ?? "";
+        _viewModel.Save(timeUnit);
+        Close();
+
+    }
+
+    private void TimeUnitComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var timeUnit = TimeUnitComboBox.SelectedItem.ToString() ?? "";
+        AfkTimeTextBox.Text = _viewModel.ConvertTime(_previousTimeUnit, timeUnit);
+        _previousTimeUnit = timeUnit;
     }
 }
