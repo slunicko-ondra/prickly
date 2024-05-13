@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Win32;
 using PricklyApp.ViewModels;
 
 namespace PricklyApp.Views;
@@ -39,5 +40,19 @@ public partial class SettingsWindow : Window
         var timeUnit = TimeUnitComboBox.SelectedItem.ToString() ?? "";
         AfkTimeTextBox.Text = _viewModel.ConvertTime(_previousTimeUnit, timeUnit);
         _previousTimeUnit = timeUnit;
+    }
+
+    private void ExportButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Filter = "CSV files (*.csv)|*.csv",
+            FilterIndex = 1,
+            RestoreDirectory = true
+        };
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            _viewModel.Export(saveFileDialog.FileName, ProjectsListBox.SelectedItems.Cast<string>().ToList());
+        }
     }
 }

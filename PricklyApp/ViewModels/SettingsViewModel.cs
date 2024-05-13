@@ -1,4 +1,5 @@
 using PricklyApp.Models;
+using PricklyApp.Utils;
 
 namespace PricklyApp.ViewModels;
 
@@ -62,5 +63,11 @@ public class SettingsViewModel
         }
         AfkTime = afkTime.ToString();
         return AfkTime;
+    }
+
+    public void Export(string fileName, List<string> projectNames)
+    {
+        var projects = _databaseManager.GetProjects().Where(p => projectNames.Contains(p.Name)).ToList();
+        CsvManager.Export(projects, fileName);
     }
 }
