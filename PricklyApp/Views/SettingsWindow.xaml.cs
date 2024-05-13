@@ -55,4 +55,32 @@ public partial class SettingsWindow : Window
             _viewModel.Export(saveFileDialog.FileName, ProjectsListBox.SelectedItems.Cast<string>().ToList());
         }
     }
+
+    private void SelectFileButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog
+        {
+            Filter = "CSV files (*.csv)|*.csv",
+            FilterIndex = 1,
+            RestoreDirectory = true
+        };
+        if (openFileDialog.ShowDialog() == true)
+        {
+            ImportTextBox.Text = openFileDialog.FileName;
+        }
+    }
+
+    private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.Import(ImportTextBox.Text);
+    }
+
+    private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var result = MessageBox.Show("Are you sure you want to delete all projects?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (result == MessageBoxResult.Yes)
+        {
+            _viewModel.DeleteAllProjects();
+        }
+    }
 }

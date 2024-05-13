@@ -155,4 +155,10 @@ public class DatabaseManager
         projects.Update(project);
         return true;
     }
+
+    public void DeleteAll()
+    {
+        using var db = new LiteDatabase(_path);
+        db.DropCollection("projects");
+    }
 }

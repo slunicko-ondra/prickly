@@ -1,3 +1,5 @@
+using System.IO;
+using System.Windows;
 using PricklyApp.Models;
 using PricklyApp.Utils;
 
@@ -6,7 +8,7 @@ namespace PricklyApp.ViewModels;
 public class SettingsViewModel
 {
     private DatabaseManager _databaseManager;
-    public string[] ProjectNames { get; }
+    public string[] ProjectNames { get; private set; }
     public string[] TimeUnits { get; } = ["seconds", "minutes", "hours"];
 
     public string AfkTime { get; set; }
@@ -69,5 +71,30 @@ public class SettingsViewModel
     {
         var projects = _databaseManager.GetProjects().Where(p => projectNames.Contains(p.Name)).ToList();
         CsvManager.Export(projects, fileName);
+    }
+
+    public void Import(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+        {
+            MessageBox.Show("Select a file to import.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        try
+        {
+            CsvManager.Import(fileName, _databaseManager);
+        }
+        catch (FileNotFoundException e)
+        {
+            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        ProjectNames = _databaseManager.GetProjects().Select(p => p.Name).ToArray();
+    }
+
+    public void DeleteAllProjects()
+    {
+        _databaseManager.DeleteAll();
+        ProjectNames = _databaseManager.GetProjects().Select(p => p.Name).ToArray();
     }
 }
