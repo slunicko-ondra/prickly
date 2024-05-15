@@ -146,7 +146,7 @@ public class DatabaseManager
         {
             throw new ArgumentException("Task not found.");
         }
-        var interval = task.WorkIntervals.LastOrDefault(i => i.End == null);
+        var interval = task.WorkIntervals.LastOrDefault(i => i.End == null && i.Start != null);
         if (interval == null)
         {
             return false;
