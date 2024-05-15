@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,12 +12,14 @@ public partial class SettingsWindow : Window
 {
     private SettingsViewModel _viewModel;
     private string _previousTimeUnit;
+    private bool _projectsDeleted;
     
     public SettingsWindow()
     {
         InitializeComponent();
         _viewModel = new SettingsViewModel();
         _previousTimeUnit = "seconds";
+        _projectsDeleted = false;
         TimeUnitComboBox.SelectedIndex = 0;
         DataContext = _viewModel;
     }
@@ -81,6 +84,12 @@ public partial class SettingsWindow : Window
         if (result == MessageBoxResult.Yes)
         {
             _viewModel.DeleteAllProjects();
+            _projectsDeleted = true;
         }
+    }
+
+    private void SettingsWindow_OnClosing(object? sender, CancelEventArgs e)
+    {
+        DialogResult = _projectsDeleted;
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using PricklyApp.Models;
@@ -8,7 +9,7 @@ namespace PricklyApp.ViewModels;
 public class SettingsViewModel
 {
     private DatabaseManager _databaseManager;
-    public string[] ProjectNames { get; private set; }
+    public ObservableCollection<string> ProjectNames { get; private set; }
     public string[] TimeUnits { get; } = ["seconds", "minutes", "hours"];
 
     public string AfkTime { get; set; }
@@ -16,7 +17,7 @@ public class SettingsViewModel
     public SettingsViewModel()
     {
         _databaseManager = new DatabaseManager(App.Config.ConnectionStrings.ConnectionStrings["litedb"].ConnectionString);
-        ProjectNames = _databaseManager.GetProjects().Select(p => p.Name).ToArray();
+        ProjectNames = new ObservableCollection<string>(_databaseManager.GetProjects().Select(p => p.Name).ToList());
         AfkTime = App.Config.AppSettings.Settings["afkSeconds"].Value;
     }
 
@@ -93,12 +94,12 @@ public class SettingsViewModel
             MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        ProjectNames = _databaseManager.GetProjects().Select(p => p.Name).ToArray();
+        ProjectNames = new ObservableCollection<string>(_databaseManager.GetProjects().Select(p => p.Name).ToList());
     }
 
     public void DeleteAllProjects()
     {
         _databaseManager.DeleteAll();
-        ProjectNames = _databaseManager.GetProjects().Select(p => p.Name).ToArray();
+        ProjectNames.Clear();
     }
 }

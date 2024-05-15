@@ -196,7 +196,12 @@ public partial class MainWindow : Window
         {
             Owner = this
         };
-        settingsWindow.ShowDialog();
+        if (settingsWindow.ShowDialog() == true)
+        {
+            _viewModel.UpdateProjectNames();
+            _viewModel.UpdateTaskNames();
+            ProjectComboBox.SelectedIndex = -1;
+        }
         _maxAfkSeconds = int.Parse(App.Config.AppSettings.Settings["afkSeconds"].Value);
     }
 
@@ -206,6 +211,7 @@ public partial class MainWindow : Window
         var taskName = TaskComboBox.SelectedItem?.ToString();
         if (projectName == null || taskName == null)
         {
+            MessageBox.Show(this, "Select project and task.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 

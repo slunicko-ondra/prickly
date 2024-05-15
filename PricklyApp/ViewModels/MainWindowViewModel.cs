@@ -39,9 +39,20 @@ public class MainWindowViewModel
         return project.Tasks.Select(t => t.Name).ToList();
     }
     
-    public void UpdateTaskNames(string projectName)
+    public void UpdateProjectNames()
+    {
+        ProjectNames.Clear();
+        var projects = GetProjectNames();
+        foreach (var project in projects)
+        {
+            TaskNames.Add(project);
+        }
+    }
+    
+    public void UpdateTaskNames(string? projectName=null)
     {
         TaskNames.Clear();
+        if (projectName == null) return;
         var tasks = GetTasks(projectName);
         foreach (var task in tasks)
         {
