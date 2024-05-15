@@ -36,6 +36,7 @@ public partial class MainWindow : Window
         
         _globalHook = Hook.GlobalEvents();
         _globalHook.MouseDownExt += GlobalHook_OnUserActivity;
+        _globalHook.MouseWheelExt += GlobalHook_OnUserActivity;
         _globalHook.KeyPress += GlobalHook_OnUserActivity;
         _globalHook.MouseMove += GlobalHook_OnUserActivity;
     }
@@ -201,6 +202,7 @@ public partial class MainWindow : Window
             _viewModel.UpdateProjectNames();
             _viewModel.UpdateTaskNames();
             ProjectComboBox.SelectedIndex = -1;
+            _viewModel.ResetDisplayTime();
         }
         _maxAfkSeconds = int.Parse(App.Config.AppSettings.Settings["afkSeconds"].Value);
     }

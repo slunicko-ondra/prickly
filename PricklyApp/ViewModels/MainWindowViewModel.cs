@@ -92,7 +92,7 @@ public class MainWindowViewModel
         DisplayTime.Time = total;
     }
     
-    private void ResetDisplayTime()
+    public void ResetDisplayTime()
     {
         DisplayTime.Time = TimeSpan.Zero;
     }
