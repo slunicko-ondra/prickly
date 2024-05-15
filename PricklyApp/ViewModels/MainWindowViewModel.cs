@@ -75,7 +75,7 @@ public class MainWindowViewModel
     {
         var intervals = _databaseManager.GetIntervals(projectName, taskName);
         var todayCreatedAndEnded = intervals
-            .Where(i => i.CreatedAt.Date == DateTime.Today && i.End?.Date == DateTime.Today)
+            .Where(i => i.CreatedAt.Date == DateTime.Today && (i.End?.Date == DateTime.Today || (i.End?.Date == null && i.Start?.Date == null)))
             .Select(i => new TodayInterval(i.CreatedAt, i.Duration ?? TimeSpan.Zero))
             .ToList();
         var todayEnded = intervals
