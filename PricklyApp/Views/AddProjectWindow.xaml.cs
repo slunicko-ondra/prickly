@@ -19,11 +19,7 @@ public partial class AddProjectWindow : Window
     private void OkButton_OnClick(object sender, RoutedEventArgs e)
     {
         var result = _viewModel.AddProject(ProjectNameTextBox.Text, TasksTextBox.Text);
-        if (!result)
-        {
-            MessageBox.Show(this, "Project or some tasks already exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        else
+        if (result)
         {
             _projectNames.Add(ProjectNameTextBox.Text);
             Close();

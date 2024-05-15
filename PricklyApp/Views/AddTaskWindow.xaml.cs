@@ -21,11 +21,7 @@ public partial class AddTaskWindow : Window
     private void OkButton_OnClick(object sender, RoutedEventArgs e)
     {
         var result = _viewModel.AddTask(_projectName, TaskNameTextBox.Text);
-        if (!result)
-        {
-            MessageBox.Show(this, "Task already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        else
+        if (result)
         {
             _taskNames.Add(TaskNameTextBox.Text);
             Close();

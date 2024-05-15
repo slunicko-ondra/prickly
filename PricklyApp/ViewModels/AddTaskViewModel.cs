@@ -1,3 +1,4 @@
+using System.Windows;
 using PricklyApp.Models;
 
 namespace PricklyApp.ViewModels;
@@ -13,6 +14,17 @@ public class AddTaskViewModel
     
     public bool AddTask(string projectName, string taskName)
     {
-        return _databaseManager.AddTask(projectName, taskName);
+        if (taskName == "")
+        {
+            MessageBox.Show("Task name cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+        var result = _databaseManager.AddTask(projectName, taskName);
+        if (!result)
+        {
+            MessageBox.Show("Task already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        return result;
     }
 }

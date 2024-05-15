@@ -14,10 +14,29 @@ public class AddProjectViewModel
     
     public bool AddProject(string projectName, string taskNames)
     {
+        if (projectName == "")
+        {
+            MessageBox.Show("Project name cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+        
         var taskNamesList = taskNames
             .Split(App.Config.AppSettings.Settings["addProjectWindowTaskDelimiter"].Value)
             .Select(t => t.Trim())
+            .Where(t => t != "")
             .ToList();
-        return _databaseManager.AddProject(projectName, taskNamesList);
+        
+        if (taskNamesList.Count != taskNamesList.Distinct().Count())
+        {
+            MessageBox.Show("Task names must be unique.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+        
+        var result = _databaseManager.AddProject(projectName, taskNamesList);
+        if (!result)
+        {
+            MessageBox.Show("Project or some tasks already exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        return result;
     }
 }

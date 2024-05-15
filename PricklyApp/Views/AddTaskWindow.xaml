@@ -40,6 +40,7 @@
             Width="100"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
-            Content="Cancel"/>
+            Content="Cancel"
+            IsCancel="True"/>
     </Grid>
 </Window>
