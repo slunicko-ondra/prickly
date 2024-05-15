@@ -85,7 +85,14 @@
                 VerticalAlignment="Center"
                 FontSize="36"
                 Text="{Binding DisplayTime.TimeString}"/>
-            <Button Grid.Column="2" Height="25" Width="25" VerticalAlignment="Center">✎</Button>
+            <Button
+                x:Name="EditTimeButton"
+                Grid.Column="2"
+                Height="25"
+                Width="25"
+                VerticalAlignment="Center"
+                Content="✎"
+                Click="EditTimeButton_OnClick"/>
         </Grid>
         
         <Grid VerticalAlignment="Bottom">

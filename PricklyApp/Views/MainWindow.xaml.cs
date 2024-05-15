@@ -221,4 +221,23 @@ public partial class MainWindow : Window
         };
         detailWindow.ShowDialog();
     }
+
+    private void EditTimeButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var projectName = ProjectComboBox.SelectedItem?.ToString();
+        var taskName = TaskComboBox.SelectedItem?.ToString();
+        if (projectName == null || taskName == null)
+        {
+            MessageBox.Show(this, "Select project and task.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        var editTimeWindow = new EditTimeWindow(projectName, taskName)
+        {
+            Owner = this
+        };
+        if (editTimeWindow.ShowDialog() == true)
+        {
+            UpdateDisplayTime();
+        }
+    }
 }
