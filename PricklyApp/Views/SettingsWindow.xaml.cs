@@ -93,4 +93,18 @@ public partial class SettingsWindow : Window
     {
         DialogResult = _reloadProjects;
     }
+
+    private void BackupButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Filter = "DB files (*.db)|*.db",
+            FilterIndex = 1,
+            RestoreDirectory = true
+        };
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            _viewModel.Backup(saveFileDialog.FileName);
+        }
+    }
 }

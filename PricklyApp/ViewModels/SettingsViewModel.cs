@@ -104,7 +104,20 @@ public class SettingsViewModel
         {
             ProjectNames.Add(projectName);
         }
-        // ProjectNames = new ObservableCollection<string>(_databaseManager.GetProjects().Select(p => p.Name).ToList());
+    }
+    
+    public void Backup(string fileName)
+    {
+        try
+        {
+            File.Copy(App.Config.ConnectionStrings.ConnectionStrings["litedb"].ConnectionString, fileName, true);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        MessageBox.Show("Backup created successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     public void DeleteAllProjects()

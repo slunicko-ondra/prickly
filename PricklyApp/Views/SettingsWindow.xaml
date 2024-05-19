@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         Closing="SettingsWindow_OnClosing"
-        Title="Settings" Height="450" Width="425">
+        Title="Settings" Height="480" Width="425">
     <Window.DataContext>
         <viewModels:SettingsViewModel></viewModels:SettingsViewModel>
     </Window.DataContext>
@@ -23,12 +23,13 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         
         <Label 
             Grid.Row="0"
-            Content="Export to csv"/>
+            Content="Export to CSV"/>
         <ListBox 
             x:Name="ProjectsListBox"
             Grid.Row="1"
@@ -50,13 +51,27 @@
             Content="Export"
             Click="ExportButton_OnClick"/>
         
-        <Label
+        <Label 
             Grid.Row="2"
+            Margin="0, 20, 0, 0"
+            Content="Backup database"/>
+        <Button
+            x:Name="BackupButton"
+            Grid.Row="2"
+            Height="26"
+            Width="100"
+            Margin="125, 20, 0, 0"
+            HorizontalAlignment="Left"
+            Content="Backup"
+            Click="BackupButton_OnClick"/>
+        
+        <Label
+            Grid.Row="3"
             Margin="0, 10, 0, 0"
             Content="Import LiteDB file (.db)"/>
         <TextBox
             x:Name="ImportTextBox"
-            Grid.Row="3"
+            Grid.Row="4"
             Height="26"
             Width="150"
             HorizontalAlignment="Left"
@@ -64,7 +79,7 @@
             VerticalContentAlignment="Center"/>
         <Button
             x:Name="SelectFileButton"
-            Grid.Row="3"
+            Grid.Row="4"
             Height="26"
             Width="75"
             Margin="30, 0, 0, 0"
@@ -74,7 +89,7 @@
             Click="SelectFileButton_OnClick"/>
         <Button
             x:Name="ImportButton"
-            Grid.Row="3"
+            Grid.Row="4"
             Height="26"
             Width="100"
             HorizontalAlignment="Right"
@@ -83,12 +98,12 @@
             Click="ImportButton_OnClick"/>
         
         <Label
-            Grid.Row="4"
+            Grid.Row="5"
             Margin="0, 20, 0, 0"
             Content="Delete all projects"/>
         <Button
             x:Name="DeleteButton"
-            Grid.Row="4"
+            Grid.Row="5"
             Height="26"
             Width="75"
             Margin="125, 20, 0, 0"
@@ -97,16 +112,16 @@
             Click="DeleteButton_OnClick"/>
         
         <Separator
-            Grid.Row="5"
+            Grid.Row="6"
             Margin="0, 20, 0, 0"/>
         
         <Label
-            Grid.Row="6"
+            Grid.Row="7"
             Margin="0, 10, 0, 0"
             Content="Set AFK Time"/>
         <TextBox
             x:Name="AfkTimeTextBox"
-            Grid.Row="7"
+            Grid.Row="8"
             Height="26"
             Width="50"
             HorizontalAlignment="Left"
@@ -116,7 +131,7 @@
             Text="{Binding AfkTime}"/>
         <ComboBox
             x:Name="TimeUnitComboBox"
-            Grid.Row="7"
+            Grid.Row="8"
             Height="26"
             Width="75"
             Margin="55, 0, 0, 0"
@@ -125,7 +140,7 @@
             SelectionChanged="TimeUnitComboBox_OnSelectionChanged"/>
         <Button
             x:Name="SaveButton"
-            Grid.Row="8"
+            Grid.Row="9"
             Height="26"
             Width="100"
             HorizontalAlignment="Left"
@@ -134,7 +149,7 @@
             Content="Save"
             Click="SaveButton_OnClick"/>
         <Button 
-            Grid.Row="8"
+            Grid.Row="9"
             Height="26"
             Width="100"
             HorizontalAlignment="Right"
