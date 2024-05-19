@@ -12,14 +12,14 @@ public partial class SettingsWindow : Window
 {
     private SettingsViewModel _viewModel;
     private string _previousTimeUnit;
-    private bool _projectsDeleted;
+    private bool _reloadProjects;
     
     public SettingsWindow()
     {
         InitializeComponent();
         _viewModel = new SettingsViewModel();
         _previousTimeUnit = "seconds";
-        _projectsDeleted = false;
+        _reloadProjects = false;
         TimeUnitComboBox.SelectedIndex = 0;
         DataContext = _viewModel;
     }
@@ -63,7 +63,7 @@ public partial class SettingsWindow : Window
     {
         OpenFileDialog openFileDialog = new OpenFileDialog
         {
-            Filter = "CSV files (*.csv)|*.csv",
+            Filter = "DB files (*.db)|*.db",
             FilterIndex = 1,
             RestoreDirectory = true
         };
@@ -76,6 +76,7 @@ public partial class SettingsWindow : Window
     private void ImportButton_OnClick(object sender, RoutedEventArgs e)
     {
         _viewModel.Import(ImportTextBox.Text);
+        _reloadProjects = true;
     }
 
     private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
@@ -84,12 +85,12 @@ public partial class SettingsWindow : Window
         if (result == MessageBoxResult.Yes)
         {
             _viewModel.DeleteAllProjects();
-            _projectsDeleted = true;
+            _reloadProjects = true;
         }
     }
 
     private void SettingsWindow_OnClosing(object? sender, CancelEventArgs e)
     {
-        DialogResult = _projectsDeleted;
+        DialogResult = _reloadProjects;
     }
 }

@@ -12,6 +12,20 @@ public class DatabaseManager
         using var db = new LiteDatabase(_path);
         db.GetCollection<Project>("projects").EnsureIndex(p => p.Name, true);
     }
+    
+    public bool TestConnection()
+    {
+        try
+        {
+            using var db = new LiteDatabase(_path);
+            db.GetCollection<Project>("projects").EnsureIndex(p => p.Name, true);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     public bool AddProject(string name, List<string>? taskNames = null)
     {

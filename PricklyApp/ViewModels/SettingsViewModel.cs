@@ -8,8 +8,8 @@ namespace PricklyApp.ViewModels;
 
 public class SettingsViewModel
 {
-    private DatabaseManager _databaseManager;
-    public ObservableCollection<string> ProjectNames { get; private set; }
+    private readonly DatabaseManager _databaseManager;
+    public ObservableCollection<string> ProjectNames { get; }
     public string[] TimeUnits { get; } = ["seconds", "minutes", "hours"];
 
     public string AfkTime { get; set; }
@@ -72,6 +72,7 @@ public class SettingsViewModel
     {
         var projects = _databaseManager.GetProjects().Where(p => projectNames.Contains(p.Name)).ToList();
         CsvManager.Export(projects, fileName);
+        MessageBox.Show("Exported successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     public void Import(string fileName)
@@ -81,20 +82,29 @@ public class SettingsViewModel
             MessageBox.Show("Select a file to import.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        // TODO: Implement CsvManager.Import
-        MessageBox.Show("Import not implemented.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        return;
         
         try
         {
-            CsvManager.Import(fileName, _databaseManager);
+            File.Copy(fileName, App.Config.ConnectionStrings.ConnectionStrings["litedb"].ConnectionString, true);
         }
-        catch (FileNotFoundException e)
+        catch (Exception e)
         {
             MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        ProjectNames = new ObservableCollection<string>(_databaseManager.GetProjects().Select(p => p.Name).ToList());
+        if (!_databaseManager.TestConnection())
+        {
+            MessageBox.Show("Failed to import. File is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        MessageBox.Show("Imported successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        
+        ProjectNames.Clear();
+        foreach (var projectName in _databaseManager.GetProjects().Select(p => p.Name))
+        {
+            ProjectNames.Add(projectName);
+        }
+        // ProjectNames = new ObservableCollection<string>(_databaseManager.GetProjects().Select(p => p.Name).ToList());
     }
 
     public void DeleteAllProjects()

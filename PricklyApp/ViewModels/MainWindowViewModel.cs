@@ -45,7 +45,7 @@ public class MainWindowViewModel
         var projects = GetProjectNames();
         foreach (var project in projects)
         {
-            TaskNames.Add(project);
+            ProjectNames.Add(project);
         }
     }
     
