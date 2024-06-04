@@ -39,6 +39,9 @@ public partial class MainWindow : Window
         _globalHook.MouseWheelExt += GlobalHook_OnUserActivity;
         _globalHook.KeyPress += GlobalHook_OnUserActivity;
         _globalHook.MouseMove += GlobalHook_OnUserActivity;
+
+        Top = int.Parse(App.Config.AppSettings.Settings["mainWindowLocationY"].Value);
+        Left = int.Parse(App.Config.AppSettings.Settings["mainWindowLocationX"].Value);
     }
 
     private void StartStopButton_OnClick(object sender, RoutedEventArgs e)
@@ -189,6 +192,9 @@ public partial class MainWindow : Window
     private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
     {
         _viewModel.StopAllWork();
+        App.Config.AppSettings.Settings["mainWindowLocationX"].Value = Left.ToString();
+        App.Config.AppSettings.Settings["mainWindowLocationY"].Value = Top.ToString();
+        App.Config.Save();
     }
 
     private void SettingsButton_OnClick(object sender, RoutedEventArgs e)

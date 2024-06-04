@@ -29,6 +29,16 @@ public partial class App : Application
         {
             Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("afkSeconds", "300"));
         }
+        
+        if (Config.AppSettings.Settings["mainWindowLocationX"] == null)
+        {
+            Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("mainWindowLocationX", "100"));
+        }
+        
+        if (Config.AppSettings.Settings["mainWindowLocationY"] == null)
+        {
+            Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("mainWindowLocationY", "100"));
+        }
         Config.Save();
     }
 }
