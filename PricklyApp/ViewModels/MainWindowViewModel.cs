@@ -9,8 +9,6 @@ public class MainWindowViewModel
     public ObservableCollection<string> ProjectNames { get; }
     public ObservableCollection<string> TaskNames { get; }
     public DisplayTime DisplayTime { get; set; }
-    private List<TodayInterval> _todayIntervals;
-    private DateTime _today;
     
     public MainWindowViewModel()
     {
@@ -19,8 +17,6 @@ public class MainWindowViewModel
         TaskNames = new ObservableCollection<string>();
         DisplayTime = new DisplayTime();
         ResetDisplayTime();
-        _todayIntervals = new List<TodayInterval>();
-        _today = DateTime.Today;
     }
     
     private List<string> GetProjectNames()
@@ -73,18 +69,7 @@ public class MainWindowViewModel
     
     public void UpdateDisplayTime(string projectName, string taskName)
     {
-        var intervals = _databaseManager.GetIntervals(projectName, taskName);
-        var todayCreatedAndEnded = intervals
-            .Where(i => i.CreatedAt.Date == DateTime.Today && (i.End?.Date == DateTime.Today || (i.End?.Date == null && i.Start?.Date == null)))
-            .Select(i => new TodayInterval(i.CreatedAt, i.Duration ?? TimeSpan.Zero))
-            .ToList();
-        var todayEnded = intervals
-            .Where(i => i.CreatedAt.Date != DateTime.Today && i.End?.Date == DateTime.Today)
-            .Select(i => new TodayInterval(i.End ?? DateTime.Today, DateTime.Today - i.End ?? TimeSpan.Zero))
-            .ToList();
-        var total = todayCreatedAndEnded.Concat(todayEnded)
-            .Select(i => i.Duration)
-            .Aggregate(TimeSpan.Zero, (acc, duration) => acc + duration);
+        var total = GetTodayDurationOfEndedTasks(projectName, taskName);
         total += _databaseManager.GetIntervals(projectName, taskName)
             .Where(i => i.CreatedAt.Date == DateTime.Today && i.End == null && i.Duration == null)
             .Select(i => DateTime.Now - i.CreatedAt)
@@ -112,18 +97,20 @@ public class MainWindowViewModel
         }
     }
     
-    private void GetTodayIntervals(string projectName, string taskName)
+    private TimeSpan GetTodayDurationOfEndedTasks(string projectName, string taskName)
     {
         var intervals = _databaseManager.GetIntervals(projectName, taskName);
         var todayCreatedAndEnded = intervals
-            .Where(i => i.CreatedAt.Date == DateTime.Today && i.End?.Date == DateTime.Today)
+            .Where(i => i.CreatedAt.Date == DateTime.Today && (i.End?.Date == DateTime.Today || (i.End?.Date == null && i.Start?.Date == null)))
             .Select(i => new TodayInterval(i.CreatedAt, i.Duration ?? TimeSpan.Zero))
             .ToList();
         var todayEnded = intervals
             .Where(i => i.CreatedAt.Date != DateTime.Today && i.End?.Date == DateTime.Today)
             .Select(i => new TodayInterval(i.End ?? DateTime.Today, DateTime.Today - i.End ?? TimeSpan.Zero))
             .ToList();
-        _todayIntervals = todayCreatedAndEnded.Concat(todayEnded).ToList();
-        _today = DateTime.Today;
+        var total = todayCreatedAndEnded.Concat(todayEnded)
+            .Select(i => i.Duration)
+            .Aggregate(TimeSpan.Zero, (acc, duration) => acc + duration);
+        return total;
     }
 }

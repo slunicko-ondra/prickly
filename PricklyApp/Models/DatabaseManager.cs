@@ -175,4 +175,14 @@ public class DatabaseManager
         using var db = new LiteDatabase(_path);
         db.DropCollection("projects");
     }
+
+    public void DeleteProjects(List<string> projectNames)
+    {
+        using var db = new LiteDatabase(_path);
+        var projects = db.GetCollection<Project>("projects");
+        foreach (var projectName in projectNames)
+        {
+            projects.DeleteMany(p => p.Name == projectName);
+        }
+    }
 }

@@ -125,4 +125,13 @@ public class SettingsViewModel
         _databaseManager.DeleteAll();
         ProjectNames.Clear();
     }
+
+    public void DeleteSelectedProjects(List<string> projectNames)
+    {
+        _databaseManager.DeleteProjects(projectNames);
+        foreach (var projectName in projectNames)
+        {
+            ProjectNames.Remove(projectName);
+        }
+    }
 }

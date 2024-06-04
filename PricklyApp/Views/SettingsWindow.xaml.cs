@@ -107,4 +107,14 @@ public partial class SettingsWindow : Window
             _viewModel.Backup(saveFileDialog.FileName);
         }
     }
+
+    private void DeleteSelected_OnClick(object sender, RoutedEventArgs e)
+    {
+        var result = MessageBox.Show("Are you sure you want to delete selected projects?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (result == MessageBoxResult.Yes)
+        {
+            _viewModel.DeleteSelectedProjects(ProjectsListBox.SelectedItems.Cast<string>().ToList());
+            _reloadProjects = true;
+        }
+    }
 }
