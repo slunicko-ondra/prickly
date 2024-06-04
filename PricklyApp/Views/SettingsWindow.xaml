@@ -149,10 +149,10 @@
             SelectionChanged="TimeUnitComboBox_OnSelectionChanged"/>
         <Button
             x:Name="SaveButton"
-            Grid.Row="9"
+            Grid.Row="8"
             Height="26"
             Width="100"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             IsDefault="True"
             Content="Save"
@@ -161,10 +161,10 @@
             Grid.Row="9"
             Height="26"
             Width="100"
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             IsCancel="True"
-            Content="Cancel"
+            Content="OK"
             />
     </Grid>
 </Window>
