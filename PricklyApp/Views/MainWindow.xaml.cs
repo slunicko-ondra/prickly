@@ -42,6 +42,8 @@ public partial class MainWindow : Window
 
         Top = int.Parse(App.Config.AppSettings.Settings["mainWindowLocationY"].Value);
         Left = int.Parse(App.Config.AppSettings.Settings["mainWindowLocationX"].Value);
+        ProjectComboBox.SelectedIndex = int.Parse(App.Config.AppSettings.Settings["selectedProjectIndex"].Value);
+        TaskComboBox.SelectedIndex = int.Parse(App.Config.AppSettings.Settings["selectedTaskIndex"].Value);
     }
 
     private void StartStopButton_OnClick(object sender, RoutedEventArgs e)
@@ -115,7 +117,14 @@ public partial class MainWindow : Window
         {
             Owner = this
         };
+        var oldProjectCount = _viewModel.ProjectNames.Count;
         addProjectWindow.ShowDialog();
+        if (_viewModel.ProjectNames.Count > oldProjectCount)
+        {
+            ProjectComboBox.SelectedIndex = _viewModel.ProjectNames.Count - 1;
+            TaskComboBox.SelectedIndex = 0;
+            _viewModel.ResetDisplayTime();
+        }
     }
 
     private void AddTaskButton_OnClick(object sender, RoutedEventArgs e)
@@ -131,7 +140,13 @@ public partial class MainWindow : Window
             {
                 Owner = this
             };
+            var oldTaskCount = _viewModel.TaskNames.Count;
             addTaskWindow.ShowDialog();
+            if (_viewModel.TaskNames.Count > oldTaskCount)
+            {
+                TaskComboBox.SelectedIndex = _viewModel.TaskNames.Count - 1;
+                _viewModel.ResetDisplayTime();
+            }
         }
     }
 
@@ -194,6 +209,8 @@ public partial class MainWindow : Window
         _viewModel.StopAllWork();
         App.Config.AppSettings.Settings["mainWindowLocationX"].Value = Left.ToString();
         App.Config.AppSettings.Settings["mainWindowLocationY"].Value = Top.ToString();
+        App.Config.AppSettings.Settings["selectedProjectIndex"].Value = ProjectComboBox.SelectedIndex.ToString();
+        App.Config.AppSettings.Settings["selectedTaskIndex"].Value = TaskComboBox.SelectedIndex.ToString();
         App.Config.Save();
     }
 

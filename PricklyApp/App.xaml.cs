@@ -39,6 +39,16 @@ public partial class App : Application
         {
             Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("mainWindowLocationY", "100"));
         }
+        
+        if (Config.AppSettings.Settings["selectedProjectIndex"] == null)
+        {
+            Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("selectedProjectIndex", "-1"));
+        }
+        
+        if (Config.AppSettings.Settings["selectedTaskIndex"] == null)
+        {
+            Config.AppSettings.Settings.Add(new KeyValueConfigurationElement("selectedTaskIndex", "-1"));
+        }
         Config.Save();
     }
 }
