@@ -61,7 +61,8 @@ public class DetailViewModel
         {
             if (workInterval.CreatedAt.Date == DateTime.Today)
             {
-                time += workInterval.Duration ?? throw new NullReferenceException("Duration is null.");
+                var duration = workInterval.Duration ?? TimeSpan.Zero;
+                time += duration;
             }
         }
 
@@ -75,7 +76,8 @@ public class DetailViewModel
         {
             if (workInterval.CreatedAt.Month == DateTime.Today.Month)
             {
-                time += workInterval.Duration ?? throw new NullReferenceException("Duration is null.");
+                var duration = workInterval.Duration ?? TimeSpan.Zero;
+                time += duration;
             }
         }
 
@@ -87,7 +89,8 @@ public class DetailViewModel
         var time = TimeSpan.Zero;
         foreach (var workInterval in task.WorkIntervals)
         {
-            time += workInterval.Duration ?? throw new NullReferenceException("Duration is null.");
+            var duration = workInterval.Duration ?? TimeSpan.Zero;
+            time += duration;
         }
 
         return time;
