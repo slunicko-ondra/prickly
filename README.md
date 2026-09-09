@@ -5,6 +5,10 @@ It was created as a project for the course [Introduction to C#/.NET](https://is.
 
 ![main window](./pictures/prickly.png)
 
+## Requirements
+- .NET 8 Desktop runtime must be installed on the target Windows PC.
+- The app stores its local config and database in `%LOCALAPPDATA%\PricklyApp` so it can run without administrator privileges.
+
 ## NuGets
 - [LiteDB](https://www.litedb.org)
 - [MouseKeyHook](https://github.com/gmamaladze/globalmousekeyhook)
